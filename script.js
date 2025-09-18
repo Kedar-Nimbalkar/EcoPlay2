@@ -13,7 +13,7 @@ function uid(prefix='id'){ return prefix + '_' + Math.random().toString(36).slic
 function load(key, defaultVal){ try { const v=localStorage.getItem(key); return v? JSON.parse(v): defaultVal; } catch(e){ return defaultVal; } }
 function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
 
-/* init basic stores if not present */
+/* init basic stores */
 if(!load(DB.usersKey, null)){
   save(DB.usersKey, [{
     id: uid('u'),
@@ -61,10 +61,6 @@ const navLinks = document.querySelectorAll('.nav-link');
 const currentUserDisplay = document.getElementById('currentUserDisplay');
 const authBtn = document.getElementById('authBtn');
 document.getElementById('year').innerText = new Date().getFullYear();
-
-/* ---------- Auth & User management ---------- */
-function getUsers(){ return load(DB.usersKey, []); }
-function saveUsers(u){ save(DB.usersKey, u); }
 
 /* ---------- Modal helpers ---------- */
 const modal = document.getElementById('modal');
@@ -152,7 +148,19 @@ function renderVideos(){
   }
 }
 
-/* ---------- Initial Bindings ---------- */
+/* ---------- Dummy Page Renderers ---------- */
+function renderHome(){ root.innerHTML=`<div class="container"><h2>Welcome to EcoPlay</h2><p>Navigate using the menu above.</p></div>`; }
+function renderGames(){ root.innerHTML=`<div class="container"><h2>Games</h2><p>Play eco-friendly quizzes and challenges here.</p></div>`; }
+function renderRedeem(){ root.innerHTML=`<div class="container"><h2>Redeem</h2><p>Redeem your points for eco-goodies.</p></div>`; }
+function renderAbout(){ root.innerHTML=`<div class="container"><h2>About EcoPlay</h2><p>A gamified platform to learn and practice environmental awareness.</p></div>`; }
+function renderContact(){ root.innerHTML=`<div class="container"><h2>Contact Us</h2><p>Email: support@ecoplay.org</p></div>`; }
+function renderProfile(){ root.innerHTML=`<div class="container"><h2>Profile</h2><p>Manage your EcoPlay account.</p></div>`; }
+function renderAdmin(){ root.innerHTML=`<div class="container"><h2>Admin Panel</h2><p>Admins can manage quizzes, events, and videos here.</p></div>`; }
+
+/* ---------- Auth ---------- */
+const currentUserDisplay = document.getElementById('currentUserDisplay');
+const authBtn = document.getElementById('authBtn');
+
 authBtn.addEventListener('click', ()=>{
   if(AppState.currentUser){ AppState.currentUser=null; AppState.isAdmin=false; updateAuthUI(); routeTo('home'); }
   else signInUI();
@@ -170,13 +178,14 @@ function signInUI(){
       const username = document.getElementById('mi_username').value.trim();
       const name = document.getElementById('mi_name').value.trim() || username;
       if(!username){ alert('Enter username'); return; }
-      let users = getUsers();
+      let users = load(DB.usersKey, []);
       let user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
       if(!user){
         user = { id: uid('u'), username, name, createdAt: nowISO(), points:0, badges:[], submissions:[], quizzesTaken:[], joinedEvents:[] };
-        users.push(user); saveUsers(users);
+        users.push(user); save(DB.usersKey, users);
       }
-      AppState.currentUser = user; AppState.isAdmin = false; updateAuthUI(); closeModal(); routeTo('home');
+      AppState.currentUser = user; AppState.isAdmin = (username.toLowerCase()==='admin'); 
+      updateAuthUI(); closeModal(); routeTo('home');
     });
   },50);
 }
@@ -191,8 +200,6 @@ function updateAuthUI(){
   }
 }
 
-/* ---------- Minimal Home for demo ---------- */
-function renderHome(){ root.innerHTML=`<div class="container"><h2>Welcome to EcoPlay</h2><p>Navigate using the menu above.</p></div>`; }
-
+/* ---------- Init ---------- */
 updateAuthUI();
 routeTo('home');
