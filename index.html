@@ -1,53 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EcoPlay — Gamified Environment Portal</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoPlay — Gamified Environment Platform</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="brand">🌱 EcoPlay</div>
-    <nav class="navbar">
-  <ul>
-    <li><a href="/Kedar-Nimbalkar/EcoPlay2/">Home</a></li>
-    <li><a href="games.html">Games</a></li>
-    <li><a href="redeem.html">Redeem</a></li>
-    <li><a href="videos.html">Videos</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="profile.html">Profile</a></li>
-    <li><a href="admin.html">Admin</a></li>
-  </ul>
-</nav>
 
+<header class="topbar">
+  <div class="brand">EcoPlay</div>
+  <nav class="menu">
+    <a href="#" data-section="home">Home</a>
+    <a href="#" data-section="games">Games</a>
+    <a href="#" data-section="redeem">Redeem</a>
+    <a href="#" data-section="videos">Videos</a>
+    <a href="#" data-section="about">About</a>
+    <a href="#" data-section="contact">Contact</a>
+    <a href="#" data-section="profile">Profile</a>
+    <a href="#" data-section="admin">Admin</a>
+  </nav>
+</header>
 
-    <div class="user-controls">
-      <span id="currentUserDisplay">Not signed in</span>
-      <button id="authBtn" class="btn small">Sign in</button>
-    </div>
-  </header>
+<main>
+  <section id="home" class="active">
+    <h1>Welcome to EcoPlay</h1>
+    <p>Engage with games, videos, and challenges to promote environmental awareness.</p>
+  </section>
 
-  <main id="app">
-    <!-- Views will be injected here -->
-  </main>
+  <section id="games">
+    <h1>Games</h1>
+    <p>Play interactive environmental games here!</p>
+  </section>
 
-  <footer class="footer">
-    <div>© <span id="year"></span> EcoPlay — Encourage, Engage, Environment</div>
-  </footer>
+  <section id="redeem">
+    <h1>Redeem</h1>
+    <p>Redeem your EcoPoints for rewards and perks.</p>
+  </section>
 
-  <!-- Tiny modal area for messages -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-card">
-      <button id="modalClose" class="modal-close">✕</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
+  <section id="videos">
+    <h1>Videos</h1>
+    <p>Watch educational and inspiring eco-videos.</p>
+  </section>
 
-  <script src="script.js"></script>
+  <section id="about">
+    <h1>About EcoPlay</h1>
+    <p>EcoPlay is a gamified platform designed to teach environmental awareness to students and communities.</p>
+  </section>
+
+  <section id="contact">
+    <h1>Contact Us</h1>
+    <p>Email: support@ecoplay.com</p>
+    <p>Phone: +91-9876543210</p>
+  </section>
+
+  <section id="profile">
+    <h1>User Profile</h1>
+    <p>View and edit your profile here.</p>
+  </section>
+
+  <section id="admin">
+    <h1>Admin Dashboard</h1>
+    <p>Admin controls and analytics will appear here.</p>
+  </section>
+</main>
+
+<footer>
+  © EcoPlay — Encourage, Engage, Environment
+</footer>
+
+<script src="script.js"></script>
+<script>
+// Simple section switcher for single-page navigation
+const links = document.querySelectorAll('nav a[data-section]');
+const sections = document.querySelectorAll('main section');
+
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = link.dataset.section;
+    sections.forEach(sec => sec.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
+});
+</script>
+
 </body>
-
 </html>
